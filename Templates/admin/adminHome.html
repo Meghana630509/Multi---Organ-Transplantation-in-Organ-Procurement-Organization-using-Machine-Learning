@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Organ Transplantation - Admin Dashboard</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Orbitron Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Organ Background -->
+    <div class="organ-background"></div>
+    <div class="organ-overlay" id="organOverlay"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo"><i class="fas fa-heartbeat mr-2"></i>OrganPredict</a>
+            <div class="menu-toggle" id="mobileMenu">☰</div>
+            <div class="nav-menu" id="navMenu">
+                <div class="datetime">
+                    <span class="heart-loader"></span>
+                    <span id="datetime"></span>
+                </div>
+                <a href="adminHome" class="nav-btn"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="donorList" class="nav-btn"><i class="fas fa-user mr-1"></i>DonorDetails</a>
+                <a href="log" class="nav-btn"><i class="fas fa-user mr-1"></i>LogOut</a>
+
+                <a href="#about" class="nav-btn"><i class="fas fa-info-circle mr-1"></i>About Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-white">Admin Dashboard</h1>
+            <p class="text-lg md:text-xl mb-6 text-white">Manage Users, Oversee Organ Allocation, and Monitor System Performance with Precision</p>
+        </div>
+    </section>
+    <div class="floating-icons" id="floatingIcons"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <section id="admin-overview" class="section-card">
+            <h2><i class="fas fa-user-shield"></i> Admin Overview</h2>
+            <p>
+                Welcome to the OrganPredict Admin Dashboard. As an admin, you have full control over user management, organ allocation workflows, and system analytics. Ensure seamless operations and optimize life-saving transplant processes.
+            </p>
+        </section>
+
+        <section id="key-functions" class="section-card">
+            <h2><i class="fas fa-cogs"></i> Key Admin Functions</h2>
+            <ul style="text-align: left; max-width: 1000px; margin: 20px auto;">
+                <li><strong>User Management:</strong> Approve, edit, or deactivate user accounts for secure access.</li>
+                <li><strong>Organ Allocation:</strong> Review and adjust ML-driven donor-recipient matches.</li>
+                <li><strong>Data Oversight:</strong> Monitor medical data integrity and system inputs.</li>
+                <li><strong>Analytics Dashboard:</strong> Track transplant success rates and system performance metrics.</li>
+            </ul>
+        </section>
+
+        <section id="admin-tools" class="section-card">
+            <h2><i class="fas fa-tools"></i> Admin Tools</h2>
+            <ul style="text-align: left; max-width: 1000px; margin: 20px auto;">
+                <li>Real-time monitoring of ongoing transplant procedures.</li>
+                <li>Secure audit logs for all admin actions.</li>
+                <li>Customizable ML model parameters for allocation optimization.</li>
+                <li>Automated alerts for critical system events.</li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-gradient" style="color: #ccc;">
+        <div class="container mx-auto text-center">
+            <p class="text">© 2025 OrganPredict. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Internal Styles -->
+    <style>
+     
+        .hero-section {
+            padding: 60px 20px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-content {
+            max-width: 1300px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .section-card {
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-card h2 {
+            font-size: 1.8rem;
+            color: #E94560;
+            margin-bottom: 20px;
+        }
+
+        .section-card p,
+        .section-card li {
+            font-size: 1.1rem;
+            color: #FFFFFF;
+        }
+
+        .section-card ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-card li::before {
+            content: "🏙️";
+            margin-right: 10px;
+            color: #00FFF5;
+        }
+
+        .footer-gradient {
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #ccc;
+            text-align: center;
+        }
+
+        .footer-gradient p {
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content h1 {
+                font-size: 4rem;
+            }
+
+            .hero-content p {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navMenu = document.getElementById('navMenu');
+            const navbar = document.getElementById('navbar');
+            const navLinks = document.querySelectorAll('.nav-btn');
+            const organOverlay = document.getElementById('organOverlay');
+            const floatingIcons = document.getElementById('floatingIcons');
+
+            // Mobile Menu Toggle
+            mobileMenu.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // Active Link Highlight
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === window.location.pathname || (window.location.pathname === '/' && link.getAttribute('href') === '/')) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                navbar.classList.toggle('scrolled', window.scrollY > 10);
+            });
+
+            // Date and Time Update
+            function updateDateTime() {
+                const now = new Date();
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                };
+                document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
+            }
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            // Dynamic Organ Overlay Animation
+            function createOrganNodes() {
+                const nodeCount = 8;
+                for (let i = 0; i < nodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.classList.add('organ-node');
+                    const angle = (i / nodeCount) * 2 * Math.PI;
+                    const radius = 120 + Math.random() * 60;
+                    node.style.left = `${175 + Math.cos(angle) * radius}px`;
+                    node.style.top = `${175 + Math.sin(angle) * radius}px`;
+                    node.style.animationDelay = `${i * 0.4}s`;
+                    organOverlay.appendChild(node);
+                }
+            }
+            createOrganNodes();
+
+            // Simulate Organ Match Alert
+            setInterval(() => {
+                const randomNode = document.querySelector('.organ-node:nth-child(' + Math.floor(Math.random() * 8 + 1) + ')');
+                if (randomNode) {
+                    randomNode.style.background = '#22c55e';
+                    setTimeout(() => {
+                        randomNode.style.background = '#ff4d4d';
+                    }, 1200);
+                }
+            }, 3500);
+
+            // Floating Icons Random Animation
+            const icons = [
+                'fa-heart', 'fa-lungs', 'fa-kidney', 'fa-liver',
+                'fa-heartbeat', 'fa-stethoscope', 'fa-heart', 'fa-kidney'
+            ];
+
+            function createFloatingIcons() {
+                for (let i = 0; i < 10; i++) {
+                    const icon = document.createElement('i');
+                    icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon`;
+                    icon.style.left = `${Math.random() * 100}%`;
+                    icon.style.animationDelay = `${Math.random() * 8}s`;
+                    icon.style.animationDuration = `${6 + Math.random() * 4}s`;
+                    floatingIcons.appendChild(icon);
+                }
+            }
+            createFloatingIcons();
+        });
+    </script>
+</body>
+</html>

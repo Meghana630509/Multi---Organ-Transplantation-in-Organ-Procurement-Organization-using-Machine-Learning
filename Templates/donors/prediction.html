@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Organ Transplantation - Donor Dashboard</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-green-50 font-[Inter] min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-blue-900 text-white shadow-lg fixed w-full z-10" id="navbar">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold flex items-center">
+            <i class="fas fa-heartbeat mr-2 text-green-400"></i>Donor Selection
+        </a>
+
+        <div class="hidden md:flex items-center space-x-6">
+            <div class="flex items-center space-x-2 text-sm">
+                <span class="w-3 h-3 border-2 border-t-green-400 rounded-full animate-spin"></span>
+                <span id="datetime"></span>
+            </div>
+            <a href="donorHome" class="hover:text-green-300">Home</a>
+            <a href="training" class="hover:text-green-300">Training</a>
+            <a href="prediction" class="hover:text-green-300">Prediction</a>
+            <a href="log" class="hover:text-red-300">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 pt-28 pb-16 max-w-5xl">
+
+    <!-- Prediction Result -->
+    {% if pt %}
+    <div class="mb-6 bg-green-100 text-green-800 text-center p-4 rounded-lg shadow">
+        <h2 class="text-lg font-semibold">Prediction Result: {{ pt }}</h2>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="mb-6 bg-red-100 text-red-800 text-center p-4 rounded-lg shadow">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Donor Selection Form -->
+    <section class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-10">
+
+        <h2 class="text-3xl font-bold text-center text-blue-900 mb-10">
+            <i class="fas fa-user-check text-green-500 mr-2"></i>
+            Donor Selection Prediction
+        </h2>
+
+        <form action="prediction" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% csrf_token %}
+
+            <!-- Left Column -->
+            <div class="space-y-5">
+                <div>
+                    <label class="form-label">Age</label>
+                    <input type="number" name="Age" min="0" max="100" required class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">Referral Year</label>
+                    <input type="number" name="Referral_Year" min="2015" max="2021" required class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">Procured Year</label>
+                    <input type="number" name="Procured_Year" min="1987" max="2022" required class="form-input">
+                </div>
+
+                <div>
+                    <label class="form-label">Brain Death</label>
+                    <select name="brain_death_True" required class="form-input">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Mechanism of Death</label>
+                    <select name="Mechanism_of_Death_ICH/Stroke" required class="form-input">
+                        <option value="1">ICH / Stroke</option>
+                        <option value="0">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-5">
+                <div>
+                    <label class="form-label">Blood Type A1</label>
+                    <select name="ABO_BloodType_A1" required class="form-input">
+                        <option value="1">A1</option>
+                        <option value="0">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Blood Type O</label>
+                    <select name="ABO_BloodType_O" required class="form-input">
+                        <option value="1">O</option>
+                        <option value="0">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Approached</label>
+                    <select name="approached_True" required class="form-input">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Eye Referral</label>
+                    <select name="Eye_Referral_True" required class="form-input">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">Referral → Approach (24h)</label>
+                    <select name="referral_to_approach_within_24h" required class="form-input">
+                        <option value="1">Within 24 Hours</option>
+                        <option value="0">Not Approached</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="md:col-span-2 text-center pt-6">
+                <button type="submit"
+                    class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-12 py-3 rounded-xl text-lg font-semibold shadow-lg hover:scale-105 transition">
+                    Predict Donor Suitability
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<!-- Styles -->
+<style>
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 4px;
+    }
+    .form-input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        transition: all 0.2s ease;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        background: #ffffff;
+    }
+</style>
+
+<!-- JS -->
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        document.getElementById('datetime').textContent =
+            now.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'medium' });
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+</script>
+
+</body>
+</html>

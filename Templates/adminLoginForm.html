@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Organ Transplantation - Admin Login</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Orbitron Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Organ Background -->
+    <div class="organ-background"></div>
+    <div class="organ-overlay" id="organOverlay"></div>
+<style>
+      .main-content {
+            max-width: 1300px;
+            margin: 120px auto 60px;
+            padding: 40px 30px;
+            background: #60929d;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .main-content h1 {
+            font-size: 2rem;
+            color: #2E7D32;
+            margin-bottom: 10px;
+        }
+
+        .main-content p {
+            font-size: 0.95rem;
+            color: #444;
+            margin-bottom: 25px;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+        }
+
+        .messages li {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            color: white;
+            background-color: black;
+        }
+
+        /* Form Styles */
+        .login-form {
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: left;
+        }
+
+        .login-form label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #2E7D32;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .login-form input[type="text"]:focus,
+        .login-form input[type="password"]:focus {
+            border-color: #FBC02D;
+        }
+
+        .login-form button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #FBC02D;
+            color: #2E7D32;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+       
+
+        /* Section Cards */
+        .section-card {
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 1300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+       
+
+        .section-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(9, 7, 7, 0.3);
+        }
+
+     
+
+        .section-card h2 {
+            font-size: 1.8rem;
+            color: #E94560;
+            margin-bottom: 20px;
+        }
+
+      
+      
+        .section-card p,
+        .section-card li {
+            font-size: 1.1rem;
+            color: #FFFFFF;
+        }
+
+      
+        .section-card ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-card li::before {
+            content: "🏙️";
+            margin-right: 10px;
+            color: #00FFF5;
+        }
+
+       
+
+</style>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo"><i class="fas fa-heartbeat mr-2"></i>OrganPredict</a>
+            <div class="menu-toggle" id="mobileMenu">☰</div>
+            <div class="nav-menu" id="navMenu">
+                <div class="datetime">
+                    <span class="heart-loader"></span>
+                    <span id="datetime"></span>
+                </div>
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-1"></i>Home</a>
+                <a href="donorLoginForm" class="nav-btn"><i class="fas fa-user mr-1"></i>Donor</a>
+                <a href="adminLoginForm" class="nav-btn"><i class="fas fa-user-shield mr-1"></i>Admin</a>
+                <a href="donorRegisterForm" class="nav-btn"><i class="fas fa-user-plus mr-1"></i>Register</a>
+                <a href="#about" class="nav-btn"><i class="fas fa-info-circle mr-1"></i>About Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Admin Login Form -->
+    <main class="main-content">
+        <h1>Admin Login</h1>
+        <p>Access your account to manage user accounts and make website changes.</p>
+        <ul class="messages">
+            {% if messages %}
+            <ul class="messages" style="list-style: none; padding: 0;">
+              {% for message in messages %}
+              <li style="margin: 10px 0; padding: 12px; border-radius: 5px; 
+                       color: white; 
+                       background-color:black">
+                {{ message }}
+              </li>
+              {% endfor %}
+            </ul>
+            {% endif %}        </ul>
+        <section>
+            <h2></i> Admin Sign In</h2>
+            <form class="login-form" method="post" action="adminLoginCheck">
+                {% csrf_token %}
+                <div>
+                    <label for="adminUsername">Admin Username</label>
+                    <input type="text" id="adminUsername" name="adminUsername" placeholder="Enter your admin username" required>
+                </div>
+                <div>
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter your admin password" required>
+                </div>
+                <button type="submit">Admin Login</button>
+            </form>
+        </section>
+    </main>
+   
+    <div class="main-content">
+        <section id="about" class="section-card">
+            <h2>📘 About OrganPredict</h2>
+            <p>
+                OrganPredict is a cutting-edge platform that uses Machine Learning to optimize organ transplantation. By predicting donor-recipient compatibility and streamlining multi-organ allocation, we aim to save more lives with precision and efficiency.
+            </p>
+        </section>
+
+        <section id="how-it-works" class="section-card">
+            <h2>⚙️ How It Works</h2>
+            <ul style="text-align: left; max-width: 1000px; margin: 20px auto;">
+                <li><strong>Data Integration:</strong> Collects comprehensive medical data from donors and recipients.</li>
+                <li><strong>Predictive Modeling:</strong> Employs ML algorithms to assess compatibility and outcomes.</li>
+                <li><strong>Allocation Optimization:</strong> Prioritizes efficient multi-organ distribution.</li>
+                <li><strong>Real-Time Support:</strong> Delivers actionable insights to transplant teams instantly.</li>
+            </ul>
+        </section>
+
+        <section id="features" class="section-card">
+            <h2>🚀 Features</h2>
+            <ul style="text-align: left; max-width: 1000px; margin: 20px auto;">
+                <li>Accurate real-time compatibility predictions.</li>
+                <li>User-friendly dashboard for tracking transplant progress.</li>
+                <li>Secure admin portal for managing organ procurement.</li>
+                <li>Transparent AI explanations for trusted decisions.</li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-gradient" style="color: #ccc;">
+        <div class="container mx-auto text-center">
+            <p class="text">© 2025 OrganPredict. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const navMenu = document.getElementById('navMenu');
+            const navbar = document.getElementById('navbar');
+            const navLinks = document.querySelectorAll('.nav-btn');
+            const organOverlay = document.getElementById('organOverlay');
+            const floatingIcons = document.getElementById('floatingIcons');
+
+            // Mobile Menu Toggle
+            mobileMenu.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
+
+            // Active Link Highlight
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === window.location.pathname || (window.location.pathname === '/' && link.getAttribute('href') === '/')) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Navbar Scroll Effect
+            window.addEventListener('scroll', () => {
+                navbar.classList.toggle('scrolled', window.scrollY > 10);
+            });
+
+            // Date and Time Update
+            function updateDateTime() {
+                const now = new Date();
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit' 
+                };
+                document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
+            }
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+
+            // Dynamic Organ Overlay Animation
+            function createOrganNodes() {
+                const nodeCount = 8;
+                for (let i = 0; i < nodeCount; i++) {
+                    const node = document.createElement('div');
+                    node.classList.add('organ-node');
+                    const angle = (i / nodeCount) * 2 * Math.PI;
+                    const radius = 120 + Math.random() * 60;
+                    node.style.left = `${175 + Math.cos(angle) * radius}px`;
+                    node.style.top = `${175 + Math.sin(angle) * radius}px`;
+                    node.style.animationDelay = `${i * 0.4}s`;
+                    organOverlay.appendChild(node);
+                }
+            }
+            createOrganNodes();
+
+            // Simulate Organ Match Alert
+            setInterval(() => {
+                const randomNode = document.querySelector('.organ-node:nth-child(' + Math.floor(Math.random() * 8 + 1) + ')');
+                if (randomNode) {
+                    randomNode.style.background = '#22c55e';
+                    setTimeout(() => {
+                        randomNode.style.background = '#ff4d4d';
+                    }, 1200);
+                }
+            }, 3500);
+
+            // Floating Icons Random Animation
+            const icons = [
+                'fa-heart', 'fa-lungs', 'fa-kidney', 'fa-liver',
+                'fa-heartbeat', 'fa-stethoscope', 'fa-heart', 'fa-kidney'
+            ];
+
+            function createFloatingIcons() {
+                for (let i = 0; i < 10; i++) {
+                    const icon = document.createElement('i');
+                    icon.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon`;
+                    icon.style.left = `${Math.random() * 100}%`;
+                    icon.style.animationDelay = `${Math.random() * 8}s`;
+                    icon.style.animationDuration = `${6 + Math.random() * 4}s`;
+                    floatingIcons.appendChild(icon);
+                }
+            }
+            createFloatingIcons();
+        });
+    </script>
+</body>
+</html>
