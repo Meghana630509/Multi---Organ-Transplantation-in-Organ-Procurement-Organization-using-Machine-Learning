@@ -1,0 +1,2 @@
+# Multi---Organ-Transplantation-in-Organ-Procurement-Organization-using-Machine-Learning
+Developed a Machine Learning-based Organ Transplant Prediction System using Logistic Regression, Naïve Bayes, ANN, and XGBoost to predict donor suitability and multi-organ transplant feasibility. Built with Django, the system supports transparent, data-driven organ allocation and improves decision-making for Organ Procurement Organizations (OPOs).
